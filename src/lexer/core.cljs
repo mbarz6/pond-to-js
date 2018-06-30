@@ -56,4 +56,7 @@
 				(cons ; lex up to first paren
 					(lexeme-from-source (subs word 0 index) line-number)
 					(lex-word (subs word index) line-number)))
-			(lexeme-from-source word line-number))))  
+			(let [lexeme (lexeme-from-source word line-number)]
+				(if lexeme 
+					(cons lexeme nil) ; this way, (lex-word "foo" _) still returns a list
+					nil)))))  
