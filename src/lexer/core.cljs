@@ -14,7 +14,7 @@
 	
 (defrecord Lexeme [type data line])
 
-(defn in? 
+(defn in?
   "Checks if a collection contains an element."
   [e collection]  
   (some #{e} collection))

@@ -38,7 +38,7 @@
     :body []
   }
 
-  ; function-call
+  ; function call
   {
     :type :function-call
     :name ""
