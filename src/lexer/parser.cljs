@@ -2,6 +2,11 @@
   (:require [lexer.core :refer [in?]
              clojure.string :as str]))
 
+(defn parens 
+  [string]
+  (str "(" string ")")
+)
+
 (defn parse
   [token]
   (let [{:keys [type]} token]
@@ -9,12 +14,12 @@
       [:if :for :while :function-define]
       (str 
         (->> (case type
-               :if ["if (" (->> token :condition parse) ")"] 
+               :if ["if " (->> token :condition parse parens)] 
                :for ["for (const " (->> token :variable) " of " (->> token :iterator parse) ")"]
-               :while ["while (" (->> token :condition parse) ")"]
-               :function-define ["function " (->> token :name) "(" (->> token :params (str/join ", ")) ")"]
+               :while ["while " (->> token :condition parse parens)]
+               :function-define ["function " (->> token :name) (->> token :params (str/join ", ") parens)]
              )
-          (str/join)
+          str/join
         )
         "{\n"
         (->> token 
@@ -24,6 +29,26 @@
         )
         "}\n"
       )
+
+      [:function-call :variable-define]
+      (str
+        (->> (case type
+               :function-call [(->> token :name) (->> token :arguments (str/join ", ") parens)]
+               :variable-define [(->> token :name) " = " (->> token :value parse)]
+             )
+          str/join
+        )
+        ";\n"
+      )
+
+      [:expression]
+      (->> token :arguments (str/join ", ") parens)
+
+      [:value]
+      (->> token :body)
+
+      [:operator]
+      (->> token :body)
     )
   )
 )
