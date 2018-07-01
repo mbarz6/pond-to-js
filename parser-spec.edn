@@ -1,0 +1,72 @@
+[
+  ; if
+  {
+    :type :if
+    :condition {}
+    :body []
+    :elifs [] ; list of elif blocks
+    :else {}
+  }
+
+  ; elif
+  {
+    :type :elif
+    :condition {}
+    :body []
+  }
+
+  ; for loop
+  {
+    :type :for
+    :variable ""
+    :iterator {}
+    :body []
+  }
+
+  ; while loop
+  {
+    :type :while
+    :condition {}
+    :body []
+  }
+
+  ; function definition
+  {
+    :type :function-define
+    :name ""
+    :params [] ; list of strings
+    :body []
+  }
+
+  ; function-call
+  {
+    :type :function-call
+    :name ""
+    :arguments []
+  }
+
+  ; variable definition
+  {
+    :type :variable-define
+    :name ""
+    :value {}
+  }
+
+  ; expression
+  {
+    :type :expression
+    :body []
+  }
+
+  ; value
+  {
+    :type :value
+    :body ""
+  }
+
+  ; operator
+  {
+    :type :operator
+    :body ""
+  }
+]

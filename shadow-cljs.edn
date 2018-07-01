@@ -1,0 +1,10 @@
+{:dependencies
+ [[cider/cider-nrepl "0.16.0"]]
+
+ :source-paths
+ ["src"]
+
+ :builds
+ {:app {:target :browser
+        :output-dir "build"
+        :modules {:main {:entries [lexer.core]}}}}}
