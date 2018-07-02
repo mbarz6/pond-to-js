@@ -12,7 +12,7 @@
   (nth
     (reduce 
       (fn [[string-acc list] v] (
-        if (re-find re v) 
+        if (or (re-find re string-acc) (re-find re v)) 
         [(if (str/blank? v) "" v) (conj list string-acc)] 
         [(str string-acc v) list]
       ))
@@ -21,6 +21,10 @@
     )
     1
   )
+)
+
+(defn filter-empty [sequence]
+  (filter (complement empty?) sequence)
 )
 
 (def operators [
@@ -45,10 +49,12 @@
 ))
 
 (defn make-lexemes [source]
-  (let [lines (str/split-lines source)
-        indent (some (partial re-find #"^\s") lines)
+  (let [lines (filter-empty (str/split-lines source))
+        indent (some (partial re-find #"^\s*") lines)
         indent-regex (some->> indent
-                       (format "^%1$s|%1$s(?=%1$s)|%1$s(?=[^\\s])")
+                        (#(take 4 (repeat %)))
+                        (#(conj % "^%s|%s(?=%s)|%s(?=[^\\s])"))
+                        (apply format)
                         re-pattern
                       )]
     (->> lines
@@ -61,7 +67,7 @@
           )
           (->> line
             (split-string symbol-regex)
-            (filter (complement empty?))
+            filter-empty
           )
         )
       ))
