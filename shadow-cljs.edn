@@ -6,5 +6,7 @@
 
  :builds
  {:app {:target :browser
-        :output-dir "build"
-        :modules {:main {:entries [lexer.core]}}}}}
+        :output-dir "public/js"
+        :asset-path "/js"
+        :devtools {:http-root "public" :http-port 8020}
+        :modules {:main {:entries [lexer.alt-core]}}}}}
