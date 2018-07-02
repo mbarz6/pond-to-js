@@ -51,10 +51,8 @@
 (defn make-lexemes [source]
   (let [lines (filter-empty (str/split-lines source))
         indent (some (partial re-find #"^\s*") lines)
-        indent-regex (some->> indent
-                        (#(take 4 (repeat %)))
-                        (#(conj % "^%s|%s(?=%s)|%s(?=[^\\s])"))
-                        (apply format)
+        indent-regex (some-> indent
+                        (#(format" ^%s|%s(?=%s)|%s(?=[^\\s])"i % % % %))
                         re-pattern
                       )]
     (->> lines
