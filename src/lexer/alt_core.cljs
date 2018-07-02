@@ -45,26 +45,27 @@
 ))
 
 (defn make-lexemes [source]
-  (->> source
-    str/split-lines
-    (map (fn [line]
-      (if-let [indentation (some (partial re-find #"^\s") line)]
+  (let [lines (str/split-lines source)
+        indent (some (partial re-find #"^\s") lines)
+        indent-regex (some->> indent
+                       (format "^%1$s|%1$s(?=%1$s)|%1$s(?=[^\\s])")
+                        re-pattern
+                      )]
+    (->> lines
+      (map (fn [line]
         (concat
-          (-> "^%1$s|%1$s(?=%1$s)|%1$s(?=[^\\s])"
-            (format indentation)
-            re-pattern
+          (some-> indent-regex
             (re-seq line)
             count
-            repeat :indent
+            (repeat :indent)
           )
           (->> line
             (split-string symbol-regex)
             (filter (complement empty?))
           )
         )
-        
-      )
-    ))
+      ))
+    )
   )
 )
 
